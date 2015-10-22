@@ -72,65 +72,261 @@ class LxcContainer(name: String, configPath: String) {
 
   */
 
-  def isDefined = ???
-  def state = ???
-  def isRunning = ???
-  def initPid = ???
-  def mayControl = ???
+  /** This method is not implemented yet
+    *
+    */
+  def isDefined() = native.isDefined
 
-  def freeze() = ???
-  def unfreeze() = ???
-  def start() = ???
-  def stop() = ???
-  def reboot() = ???
-  def shutdown() = ???
+  /** This method is not implemented yet
+    *
+    */
+  def state() = native.state()
 
-  def loadConfig() = ???
-  def saveConfig() = ???
-  def getConfigPath = ???
-  def setConfigPath() = ???
-  def configFileName = ???
-  def setConfigItem() = ???
-  def clearConfig() = ???
-  def clearConfigItem() = ???
-  def getConfigItem = ???
-  def getRunningConfigItem = ???
-  def getKeys = ???
+  /** This method is not implemented yet
+    *
+    */
+  def isRunning() = native.isRunning
 
-  def wantDaemonize = ???
-  def wantCloseAllFDs = ???
+  /** This method is not implemented yet
+    *
+    */
+  def initPid() = native.initPid()
 
-  def waitForState = ???
+  /** This method is not implemented yet
+    *
+    */
+  def mayControl() = native.mayControl()
 
-  def create() = ???
-  def cloneContainer() = ???
-  def rename() = ???
-  def destroy() = ???
-  def destroyWithSnapshots() = ???
-  def snapshotDestroyAll() = ???
 
-  def checkpoint() = ???
-  def restore() = ???
-  def snapshot() = ???
-  def snapshotList() = ???
-  def snapshotRestore() = ???
-  def snapshotDestroy() = ???
+  /** This method is not implemented yet
+    *
+    */
+  def freeze() = native.freeze()
 
-  def getInterfaces = ???
-  def getIps = ???
-  def attachInterface() = ???
-  def detachInterface() = ???
+  /** This method is not implemented yet
+    *
+    */
+  def unfreeze() = native.unfreeze()
 
-  def getCgroupItem = ???
-  def setCgroupItem() = ???
+  /** This method is not implemented yet
+    *
+    */
+  def start() = native.start()
 
-  def consoleGetFD = ???
-  def console = ???
-  def attach = ???
-  def attachRunWait = ???
+  /** This method is not implemented yet
+    *
+    */
+  def stop() = native.stop()
 
-  def addDeviceNode() = ???
-  def removeDeviceNode() = ???
+  /** This method is not implemented yet
+    *
+    */
+  def reboot() = native.reboot()
+
+  /** This method is not implemented yet
+    *
+    */
+  def shutdown() = native.shutdown()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def loadConfig() = native.loadConfig()
+
+  /** This method is not implemented yet
+    *
+    */
+  def saveConfig() = native.saveConfig()
+
+  /** This method is not implemented yet
+    *
+    */
+  def getConfigPath() = native.getConfigPath
+
+  /** This method is not implemented yet
+    *
+    */
+  def setConfigPath() = native.setConfigPath()
+
+  /** This method is not implemented yet
+    *
+    */
+  def configFileName() = native.configFileName()
+
+  /** This method is not implemented yet
+    *
+    */
+  def setConfigItem() = native.setConfigItem()
+
+  /** This method is not implemented yet
+    *
+    */
+  def clearConfig() = native.clearConfig()
+
+  /** This method is not implemented yet
+    *
+    */
+  def clearConfigItem() = native.clearConfigItem()
+
+  /** This method is not implemented yet
+    *
+    */
+  def getConfigItem() = native.getConfigItem
+
+  /** This method is not implemented yet
+    *
+    */
+  def getRunningConfigItem() = native.getRunningConfigItem
+
+  /** This method is not implemented yet
+    *
+    */
+  def getKeys() = native.getKeys
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def wantDaemonize() = native.wantDaemonize()
+
+  /** This method is not implemented yet
+    *
+    */
+  def wantCloseAllFDs() = native.wantCloseAllFDs()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def waitForState() = native.waitForState()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def create() = native.create()
+
+  /** This method is not implemented yet
+    *
+    */
+  def cloneContainer() = native.cloneContainer()
+
+  /** This method is not implemented yet
+    *
+    */
+  def rename() = native.rename()
+
+  /** This method is not implemented yet
+    *
+    */
+  def destroy() = native.destroy()
+
+  /** This method is not implemented yet
+    *
+    */
+  def destroyWithSnapshots() = native.destroyWithSnapshots()
+
+  /** This method is not implemented yet
+    *
+    */
+  def snapshotDestroyAll() = native.snapshotDestroyAll()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def checkpoint() = native.checkpoint()
+
+  /** This method is not implemented yet
+    *
+    */
+  def restore() = native.restore()
+
+  /** This method is not implemented yet
+    *
+    */
+  def snapshot() = native.snapshot()
+
+  /** This method is not implemented yet
+    *
+    */
+  def snapshotList() = native.snapshotList()
+
+  /** This method is not implemented yet
+    *
+    */
+  def snapshotRestore() = native.snapshotRestore()
+
+  /** This method is not implemented yet
+    *
+    */
+  def snapshotDestroy() = native.snapshotDestroy()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def getInterfaces() = native.getInterfaces
+
+  /** This method is not implemented yet
+    *
+    */
+  def getIps() = native.getIps
+
+  /** This method is not implemented yet
+    *
+    */
+  def attachInterface() = native.attachInterface()
+
+  /** This method is not implemented yet
+    *
+    */
+  def detachInterface() = native.detachInterface()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def getCgroupItem() = native.getCgroupItem
+
+  /** This method is not implemented yet
+    *
+    */
+  def setCgroupItem() = native.setCgroupItem()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def consoleGetFD() = native.consoleGetFD()
+
+  /** This method is not implemented yet
+    *
+    */
+  def console() = native.console()
+
+  /** This method is not implemented yet
+    *
+    */
+  def attach() = native.attach()
+
+  /** This method is not implemented yet
+    *
+    */
+  def attachRunWait() = native.attachRunWait()
+
+
+  /** This method is not implemented yet
+    *
+    */
+  def addDeviceNode() = native.addDeviceNode()
+
+  /** This method is not implemented yet
+    *
+    */
+  def removeDeviceNode() = native.removeDeviceNode()
+
 
 
 }
