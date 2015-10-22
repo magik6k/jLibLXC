@@ -4,9 +4,8 @@ import java.io.File
 
 import net.magik6k.jliblxc.natives.NativeLxcContainer
 
- object NativeLoader {
+private[jliblxc] object NativeLoader {
   System.load(new File("target/native/bin/libjlxc.so").getAbsolutePath)
 
-  val nativeContainer: NativeLxcContainer = new NativeLxcContainer
-
+  def getNativeContainer(name: String, configPath: String) = new NativeLxcContainer(name, configPath)
 }
