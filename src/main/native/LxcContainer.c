@@ -8,8 +8,8 @@ JNIEXPORT jlong JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer_open
 
   struct lxc_container* container = lxc_container_new(name, configPath);
 
-  (*env)->ReleaseStringUTFChars(env, jname, name);
-  (*env)->ReleaseStringUTFChars(env, jconfigPath, configPath);
+  (*env) -> ReleaseStringUTFChars(env, jname, name);
+  (*env) -> ReleaseStringUTFChars(env, jconfigPath, configPath);
   return (long) container;
 }
 

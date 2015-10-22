@@ -1,80 +1,83 @@
 package net.magik6k.jliblxc.natives
 
 private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
-  private var containerInfo: Long = open(name, configPath)
+  private var containerPtr: Long = open(name, configPath)
 
+  if(containerPtr == 0)
+    throw new NullPointerException("Cannot open container")
   ////////////
   // EXPORT //
   ////////////
 
   // Static
   def free() = {
-    if(containerInfo != 0) _free(containerInfo)
-    containerInfo = 0
+    if(containerPtr != 0) _free(containerPtr)
+    containerPtr = 0
   }
 
   override def finalize() = free()
 
   // Non-static
-  def isDefined = _isDefined(containerInfo)
-  def state() = _state(containerInfo)
-  def isRunning = _isRunning(containerInfo)
-  def initPid() = _initPid(containerInfo)
-  def mayControl() = _mayControl(containerInfo)
+  def getLastError = _getLastError(containerPtr)
+  def isDefined = _isDefined(containerPtr)
+  def state() = _state(containerPtr)
+  def isRunning = _isRunning(containerPtr)
+  def initPid() = _initPid(containerPtr)
+  def mayControl() = _mayControl(containerPtr)
 
-  def freeze() = _freeze(containerInfo)
-  def unfreeze() = _unfreeze(containerInfo)
-  def start() = _start(containerInfo)
-  def stop() = _stop(containerInfo)
-  def reboot() = _reboot(containerInfo)
-  def shutdown() = _shutdown(containerInfo)
+  def freeze() = _freeze(containerPtr)
+  def unfreeze() = _unfreeze(containerPtr)
+  def start() = _start(containerPtr)
+  def stop() = _stop(containerPtr)
+  def reboot() = _reboot(containerPtr)
+  def shutdown() = _shutdown(containerPtr)
 
-  def loadConfig() = _loadConfig(containerInfo)
-  def saveConfig() = _saveConfig(containerInfo)
-  def getConfigPath = _getConfigPath(containerInfo)
-  def setConfigPath() = _setConfigPath(containerInfo)
-  def configFileName() = _configFileName(containerInfo)
-  def setConfigItem() = _setConfigItem(containerInfo)
-  def clearConfig() = _clearConfig(containerInfo)
-  def clearConfigItem() = _clearConfigItem(containerInfo)
-  def getConfigItem = _getConfigItem(containerInfo)
-  def getRunningConfigItem = _getRunningConfigItem(containerInfo)
-  def getKeys = _getKeys(containerInfo)
+  def loadConfig() = _loadConfig(containerPtr)
+  def saveConfig() = _saveConfig(containerPtr)
+  def getConfigPath = _getConfigPath(containerPtr)
+  def setConfigPath() = _setConfigPath(containerPtr)
+  def configFileName() = _configFileName(containerPtr)
+  def setConfigItem() = _setConfigItem(containerPtr)
+  def clearConfig() = _clearConfig(containerPtr)
+  def clearConfigItem() = _clearConfigItem(containerPtr)
+  def getConfigItem = _getConfigItem(containerPtr)
+  def getRunningConfigItem = _getRunningConfigItem(containerPtr)
+  def getKeys = _getKeys(containerPtr)
 
-  def wantDaemonize() = _wantDaemonize(containerInfo)
-  def wantCloseAllFDs() = _wantCloseAllFDs(containerInfo)
+  def wantDaemonize() = _wantDaemonize(containerPtr)
+  def wantCloseAllFDs() = _wantCloseAllFDs(containerPtr)
 
-  def waitForState() = _waitForState(containerInfo)
+  def waitForState() = _waitForState(containerPtr)
 
-  def create() = _create(containerInfo)
-  def cloneContainer() = _cloneContainer(containerInfo)
-  def rename() = _rename(containerInfo)
-  def destroy() = _destroy(containerInfo)
-  def destroyWithSnapshots() = _destroyWithSnapshots(containerInfo)
-  def snapshotDestroyAll() = _snapshotDestroyAll(containerInfo)
+  def create() = _create(containerPtr)
+  def cloneContainer() = _cloneContainer(containerPtr)
+  def rename() = _rename(containerPtr)
+  def destroy() = _destroy(containerPtr)
+  def destroyWithSnapshots() = _destroyWithSnapshots(containerPtr)
+  def snapshotDestroyAll() = _snapshotDestroyAll(containerPtr)
 
-  def checkpoint() = _checkpoint(containerInfo)
-  def restore() = _restore(containerInfo)
-  def snapshot() = _snapshot(containerInfo)
-  def snapshotList() = _snapshotList(containerInfo)
-  def snapshotRestore() = _snapshotRestore(containerInfo)
-  def snapshotDestroy() = _snapshotDestroy(containerInfo)
+  def checkpoint() = _checkpoint(containerPtr)
+  def restore() = _restore(containerPtr)
+  def snapshot() = _snapshot(containerPtr)
+  def snapshotList() = _snapshotList(containerPtr)
+  def snapshotRestore() = _snapshotRestore(containerPtr)
+  def snapshotDestroy() = _snapshotDestroy(containerPtr)
 
-  def getInterfaces = _getInterfaces(containerInfo)
-  def getIps = _getIps(containerInfo)
-  def attachInterface() = _attachInterface(containerInfo)
-  def detachInterface() = _detachInterface(containerInfo)
+  def getInterfaces = _getInterfaces(containerPtr)
+  def getIps = _getIps(containerPtr)
+  def attachInterface() = _attachInterface(containerPtr)
+  def detachInterface() = _detachInterface(containerPtr)
 
-  def getCgroupItem = _getCgroupItem(containerInfo)
-  def setCgroupItem() = _setCgroupItem(containerInfo)
+  def getCgroupItem = _getCgroupItem(containerPtr)
+  def setCgroupItem() = _setCgroupItem(containerPtr)
 
-  def consoleGetFD() = _consoleGetFD(containerInfo)
-  def console() = _console(containerInfo)
-  def attach() = _attach(containerInfo)
-  def attachRunWait() = _attachRunWait(containerInfo)
+  def consoleGetFD() = _consoleGetFD(containerPtr)
+  def console() = _console(containerPtr)
+  def attach() = _attach(containerPtr)
+  def attachRunWait() = _attachRunWait(containerPtr)
 
-  def addDeviceNode() = _addDeviceNode(containerInfo)
-  def removeDeviceNode() = _removeDeviceNode(containerInfo)
+  def addDeviceNode() = _addDeviceNode(containerPtr)
+  def removeDeviceNode() = _removeDeviceNode(containerPtr)
 
 
   /////////////
@@ -82,24 +85,29 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   /////////////
 
   // Static
+  // Native: LxcContainer.c
   @native protected def open(name: String, configPath: String): Long
   @native protected def _free(ptr: Long): Long
 
   // Non-static
-  @native protected def _isDefined(ptr: Long): Unit
-  @native protected def _state(ptr: Long): Unit
-  @native protected def _isRunning(ptr: Long): Unit
-  @native protected def _initPid(ptr: Long): Unit
-  @native protected def _mayControl(ptr: Long): Unit
 
+  // Native: LxcContainerInfo.c
+  @native protected def _getLastError(ptr: Long): String
+  @native protected def _isDefined(ptr: Long): Boolean
+  @native protected def _state(ptr: Long): String
+  @native protected def _isRunning(ptr: Long): Boolean
+  @native protected def _initPid(ptr: Long): Int
+  @native protected def _mayControl(ptr: Long): Boolean
+
+  /*
   @native protected def _freeze(ptr: Long): Unit
   @native protected def _unfreeze(ptr: Long): Unit
   @native protected def _start(ptr: Long): Unit
   @native protected def _stop(ptr: Long): Unit
   @native protected def _reboot(ptr: Long): Unit
   @native protected def _shutdown(ptr: Long): Unit
-
-  @native protected def _loadConfig(ptr: Long): Unit
+  */
+  @native protected def _loadConfig(ptr: Long): Boolean /*
   @native protected def _saveConfig(ptr: Long): Unit
   @native protected def _getConfigPath(ptr: Long): Unit
   @native protected def _setConfigPath(ptr: Long): Unit
@@ -145,4 +153,69 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
 
   @native protected def _addDeviceNode(ptr: Long): Unit
   @native protected def _removeDeviceNode(ptr: Long): Unit
+  */
+
+  ///////////
+  // STUBS //
+  ///////////
+  /*protected def _isDefined(ptr: Long) = ???
+  protected def _state(ptr: Long) = ???
+  protected def _isRunning(ptr: Long) = ???
+  protected def _initPid(ptr: Long) = ???
+  protected def _mayControl(ptr: Long) = ???*/
+
+  protected def _freeze(ptr: Long) = ???
+  protected def _unfreeze(ptr: Long) = ???
+  protected def _start(ptr: Long) = ???
+  protected def _stop(ptr: Long) = ???
+  protected def _reboot(ptr: Long) = ???
+  protected def _shutdown(ptr: Long) = ???
+
+/*protected def _loadConfig(ptr: Long) = ???*/
+  protected def _saveConfig(ptr: Long) = ???
+  protected def _getConfigPath(ptr: Long) = ???
+  protected def _setConfigPath(ptr: Long) = ???
+  protected def _configFileName(ptr: Long) = ???
+  protected def _setConfigItem(ptr: Long) = ???
+  protected def _clearConfig(ptr: Long) = ???
+  protected def _clearConfigItem(ptr: Long) = ???
+  protected def _getConfigItem(ptr: Long) = ???
+  protected def _getRunningConfigItem(ptr: Long) = ???
+  protected def _getKeys(ptr: Long) = ???
+
+  protected def _wantDaemonize(ptr: Long) = ???
+  protected def _wantCloseAllFDs(ptr: Long) = ???
+
+  protected def _waitForState(ptr: Long) = ???
+
+  protected def _create(ptr: Long) = ???
+  protected def _cloneContainer(ptr: Long) = ???
+  protected def _rename(ptr: Long) = ???
+  protected def _destroy(ptr: Long) = ???
+  protected def _destroyWithSnapshots(ptr: Long) = ???
+  protected def _snapshotDestroyAll(ptr: Long) = ???
+
+  protected def _checkpoint(ptr: Long) = ???
+  protected def _restore(ptr: Long) = ???
+  protected def _snapshot(ptr: Long) = ???
+  protected def _snapshotList(ptr: Long) = ???
+  protected def _snapshotRestore(ptr: Long) = ???
+  protected def _snapshotDestroy(ptr: Long) = ???
+
+  protected def _getInterfaces(ptr: Long) = ???
+  protected def _getIps(ptr: Long) = ???
+  protected def _attachInterface(ptr: Long) = ???
+  protected def _detachInterface(ptr: Long) = ???
+
+  protected def _getCgroupItem(ptr: Long) = ???
+  protected def _setCgroupItem(ptr: Long) = ???
+
+  protected def _consoleGetFD(ptr: Long) = ???
+  protected def _console(ptr: Long) = ???
+  protected def _attach(ptr: Long) = ???
+  protected def _attachRunWait(ptr: Long) = ???
+
+  protected def _addDeviceNode(ptr: Long) = ???
+  protected def _removeDeviceNode(ptr: Long) = ???
+
 }

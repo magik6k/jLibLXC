@@ -72,23 +72,33 @@ class LxcContainer(name: String, configPath: String) {
 
   */
 
-  /** This method is not implemented yet
+  /** Returns last error
     *
+    * @return Last error that occurred
     */
-  def isDefined() = native.isDefined
+  def getLastError = native.getLastError
 
-  /** This method is not implemented yet
+  /** Determine if /var/lib/lxc/[name]/config exists.
     *
+    * @return true if container is defined, else false.
+    */
+  def isDefined = native.isDefined
+
+  /** Determine state of container.
+    *
+    * @return Static upper-case string representing state of container.
     */
   def state() = native.state()
 
-  /** This method is not implemented yet
+  /** Determine if container is running.
     *
+    * @return true if running, else false.
     */
-  def isRunning() = native.isRunning
+  def isRunning = native.isRunning
 
-  /** This method is not implemented yet
+  /** Determine process ID of the containers init process.
     *
+    * @return pid of init process as seen from outside the container.
     */
   def initPid() = native.initPid()
 
