@@ -4,12 +4,12 @@
 JNIEXPORT jlong JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer_open
   (JNIEnv* env, jobject object, jstring jname, jstring jconfigPath) {
   const char* name = (*env) -> GetStringUTFChars(env, jname, 0);
-  const char* configPath = (*env) -> GetStringUTFChars(env, jconfigPath, 0);
+  const char* configPath = jconfigPath ? (*env) -> GetStringUTFChars(env, jconfigPath, 0) : NULL;
 
   struct lxc_container* container = lxc_container_new(name, configPath);
 
   (*env) -> ReleaseStringUTFChars(env, jname, name);
-  (*env) -> ReleaseStringUTFChars(env, jconfigPath, configPath);
+  if(configPath) {(*env) -> ReleaseStringUTFChars(env, jconfigPath, configPath);}
   return (long) container;
 }
 
