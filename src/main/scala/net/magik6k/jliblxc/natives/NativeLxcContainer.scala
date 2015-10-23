@@ -27,10 +27,10 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
 
   def freeze() = _freeze(containerPtr)
   def unfreeze() = _unfreeze(containerPtr)
-  def start() = _start(containerPtr)
+  def start(args: Array[String]) = _start(containerPtr, args)
   def stop() = _stop(containerPtr)
   def reboot() = _reboot(containerPtr)
-  def shutdown() = _shutdown(containerPtr)
+  def shutdown(timeout: Int) = _shutdown(containerPtr, timeout)
 
   def loadConfig() = _loadConfig(containerPtr)
   def saveConfig() = _saveConfig(containerPtr)
@@ -99,14 +99,14 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   @native protected def _initPid(ptr: Long): Int
   @native protected def _mayControl(ptr: Long): Boolean
 
-  /*
-  @native protected def _freeze(ptr: Long): Unit
-  @native protected def _unfreeze(ptr: Long): Unit
-  @native protected def _start(ptr: Long): Unit
-  @native protected def _stop(ptr: Long): Unit
-  @native protected def _reboot(ptr: Long): Unit
-  @native protected def _shutdown(ptr: Long): Unit
-  */
+  // Native: LxcContainerPower.c
+  @native protected def _freeze(ptr: Long): Boolean
+  @native protected def _unfreeze(ptr: Long): Boolean
+  @native protected def _start(ptr: Long, args: Array[String]): Boolean
+  @native protected def _stop(ptr: Long): Boolean
+  @native protected def _reboot(ptr: Long): Boolean
+  @native protected def _shutdown(ptr: Long, timeout: Int): Boolean
+
   @native protected def _loadConfig(ptr: Long): Boolean /*
   @native protected def _saveConfig(ptr: Long): Unit
   @native protected def _getConfigPath(ptr: Long): Unit
@@ -158,20 +158,7 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   ///////////
   // STUBS //
   ///////////
-  /*protected def _isDefined(ptr: Long) = ???
-  protected def _state(ptr: Long) = ???
-  protected def _isRunning(ptr: Long) = ???
-  protected def _initPid(ptr: Long) = ???
-  protected def _mayControl(ptr: Long) = ???*/
 
-  protected def _freeze(ptr: Long) = ???
-  protected def _unfreeze(ptr: Long) = ???
-  protected def _start(ptr: Long) = ???
-  protected def _stop(ptr: Long) = ???
-  protected def _reboot(ptr: Long) = ???
-  protected def _shutdown(ptr: Long) = ???
-
-/*protected def _loadConfig(ptr: Long) = ???*/
   protected def _saveConfig(ptr: Long) = ???
   protected def _getConfigPath(ptr: Long) = ???
   protected def _setConfigPath(ptr: Long) = ???

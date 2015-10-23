@@ -8,7 +8,11 @@
 }
 */
 
-// loadConfig
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _loadConfig
+ * Signature: (J)Z
+ */
 JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1loadConfig
   (JNIEnv * env, jobject object, jlong ptr) {
   struct lxc_container* container = (struct lxc_container*) ptr;

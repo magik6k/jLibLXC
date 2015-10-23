@@ -104,41 +104,54 @@ class LxcContainer(name: String, configPath: String) {
     */
   def initPid() = native.initPid()
 
-  /** This method is not implemented yet
+  /** Determine if the caller may control the container.
     *
+    * @return false if there is a control socket for the
+    *  container monitor and the caller may not access it, otherwise
+    *  returns true.
     */
   def mayControl() = native.mayControl()
 
 
-  /** This method is not implemented yet
+  /** Freeze running container.
     *
+    * @return true on success, else false.
     */
   def freeze() = native.freeze()
 
-  /** This method is not implemented yet
+  /** Thaw a frozen container.
     *
+    * @return true on success, else false.
     */
   def unfreeze() = native.unfreeze()
 
-  /** This method is not implemented yet
+  /** Start the container.
     *
+    * @param args Optional arguments to be passed to init.
+    * @return true on success, else false.
     */
-  def start() = native.start()
+  def start(args: String*) = native.start(args.toArray)
 
-  /** This method is not implemented yet
+  /** Stop the container.
     *
+    * @return true on success, else false.
     */
   def stop() = native.stop()
 
-  /** This method is not implemented yet
+  /** Request the container reboot by sending it SIGINT.
     *
+    * @return true if reboot request successful, else false.
     */
   def reboot() = native.reboot()
 
-  /** This method is not implemented yet
+  /** Request the container shutdown by sending it SIGPWR.
     *
+    * @param timeout Seconds to wait before returning false.
+    *  (-1 to wait forever, 0 to avoid waiting).
+    *
+    * @return true if the container was shutdown successfully, else false.
     */
-  def shutdown() = native.shutdown()
+  def shutdown(timeout: Int = 5) = native.shutdown(timeout)
 
 
   /** This method is not implemented yet
