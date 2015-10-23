@@ -1,11 +1,15 @@
 package net.magik6k.jliblxc
 
+import java.io.File
+import java.nio.file.Path
+
 /** LXC Container instance
   *
   * @param name Name to use for container.
-  * @param configPath Full path to configuration file to use.
+  * @param configPath Optional full path to configuration file to use,
+  *                   by default /var/lib/lxc
   */
-class LxcContainer(name: String, configPath: String) {
+class LxcContainer(name: String, configPath: String = null) {
   val native = NativeLoader.getNativeContainer(name, configPath)
 
   def this(name: String) = this(name, null)
@@ -74,9 +78,9 @@ class LxcContainer(name: String, configPath: String) {
 
   */
 
-  /** Returns last error
+  /** Returns last error.
     *
-    * @return Last error that occurred
+    * @return Last error that occurred.
     */
   def getLastError = native.getLastError
 
@@ -154,60 +158,87 @@ class LxcContainer(name: String, configPath: String) {
   def shutdown(timeout: Int = 5) = native.shutdown(timeout)
 
 
-  /** This method is not implemented yet
+  /** Load the specified configuration for the container.
     *
+    * @param altFile Optional alternative configuration file.
+    * @return true on success, else false.
     */
-  def loadConfig() = native.loadConfig()
+  def loadConfig(altFile: File = null) = native.loadConfig(if(altFile != null) altFile.getAbsolutePath else null)
 
-  /** This method is not implemented yet
+  /** Save configuration to a file.
     *
+    * @param altFile Optional alternative configuration file.
+    * @return true on success, else false.
     */
-  def saveConfig() = native.saveConfig()
+  def saveConfig(altFile: File = null) = native.saveConfig(if(altFile != null) altFile.getAbsolutePath else null)
 
-  /** This method is not implemented yet
+  /** Determine full path to the containers configuration file.
     *
-    */
-  def getConfigPath() = native.getConfigPath
-
-  /** This method is not implemented yet
+    * Each container can have a custom configuration path. However
+    * by default it will be set to either the LXCPATH configure
+    * variable, or the lxcpath value in the LXC_GLOBAL_CONF configuration
+    * file (i.e. /etc/lxc/lxc.conf).
+    * The value for a specific container can be changed using
+    * #setConfigPath. There is no other way to specify this in general at the moment.
     *
+    * @return string representing full path to configuration file.
     */
-  def setConfigPath() = native.setConfigPath()
+  def getConfigPath = native.getConfigPath
 
-  /** This method is not implemented yet
+  /** Set the full path to the containers configuration file.
     *
+    * @param path Path to configuration file.
+    * @return true on success, else false.
     */
-  def configFileName() = native.configFileName()
+  def setConfigPath(path: File) = native.setConfigPath(path.getAbsolutePath)
 
-  /** This method is not implemented yet
+  /** Return current config file name.
     *
+    * @return config file name, or null on error.
     */
-  def setConfigItem() = native.setConfigItem()
+  def configFileName = native.configFileName()
 
-  /** This method is not implemented yet
+  /** Set a key/value configuration option.
+    *
+    * @param key Name of option to set.
+    * @param value Value to be set.
+    *
+    * @return true on success, else false.
+    */
+  def setConfigItem(key: String, value: String) = native.setConfigItem(key, value)
+
+  /** Completely clear the containers in-memory configuration.
     *
     */
   def clearConfig() = native.clearConfig()
 
-  /** This method is not implemented yet
+  /** Clear a configuration item.
     *
+    * @param key Name of option to clear.
+    * @return true on success, else false.
     */
-  def clearConfigItem() = native.clearConfigItem()
+  def clearConfigItem(key: String) = native.clearConfigItem(key)
 
-  /** This method is not implemented yet
+  /** Retrieve the value of a config item.
     *
+    * @param key Name of option to get.
+    * @return the item or null on error.
     */
-  def getConfigItem() = native.getConfigItem
+  def getConfigItem(key: String) = native.getConfigItem(key)
 
-  /** This method is not implemented yet
+  /** Retrieve the value of a config item from running container.
     *
+    * @param key Name of option to get.
+    * @return the item or null on error.
     */
-  def getRunningConfigItem() = native.getRunningConfigItem
+  def getRunningConfigItem(key: String) = native.getRunningConfigItem(key)
 
-  /** This method is not implemented yet
+  /** Retrieve a list of config item keys given a key prefix.
     *
+    * @param key Name of option to get.
+    * @return List of items for a given key or null on error.
     */
-  def getKeys() = native.getKeys
+  def getKeys(key: String) = native.getKeys(key)
 
 
   /** This method is not implemented yet

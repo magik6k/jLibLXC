@@ -32,17 +32,17 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   def reboot() = _reboot(containerPtr)
   def shutdown(timeout: Int) = _shutdown(containerPtr, timeout)
 
-  def loadConfig() = _loadConfig(containerPtr)
-  def saveConfig() = _saveConfig(containerPtr)
+  def loadConfig(altFile: String) = _loadConfig(containerPtr, altFile)
+  def saveConfig(altFile: String) = _saveConfig(containerPtr, altFile)
   def getConfigPath = _getConfigPath(containerPtr)
-  def setConfigPath() = _setConfigPath(containerPtr)
+  def setConfigPath(path: String) = _setConfigPath(containerPtr, path)
   def configFileName() = _configFileName(containerPtr)
-  def setConfigItem() = _setConfigItem(containerPtr)
+  def setConfigItem(key: String, value: String) = _setConfigItem(containerPtr, key, value)
   def clearConfig() = _clearConfig(containerPtr)
-  def clearConfigItem() = _clearConfigItem(containerPtr)
-  def getConfigItem = _getConfigItem(containerPtr)
-  def getRunningConfigItem = _getRunningConfigItem(containerPtr)
-  def getKeys = _getKeys(containerPtr)
+  def clearConfigItem(key: String) = _clearConfigItem(containerPtr, key)
+  def getConfigItem(key: String) = _getConfigItem(containerPtr, key)
+  def getRunningConfigItem(key: String) = _getRunningConfigItem(containerPtr, key)
+  def getKeys(key: String) = _getKeys(containerPtr, key)
 
   def wantDaemonize() = _wantDaemonize(containerPtr)
   def wantCloseAllFDs() = _wantCloseAllFDs(containerPtr)
@@ -107,17 +107,18 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   @native protected def _reboot(ptr: Long): Boolean
   @native protected def _shutdown(ptr: Long, timeout: Int): Boolean
 
-  @native protected def _loadConfig(ptr: Long): Boolean /*
-  @native protected def _saveConfig(ptr: Long): Unit
-  @native protected def _getConfigPath(ptr: Long): Unit
-  @native protected def _setConfigPath(ptr: Long): Unit
-  @native protected def _configFileName(ptr: Long): Unit
-  @native protected def _setConfigItem(ptr: Long): Unit
+  @native protected def _loadConfig(ptr: Long, altFile: String): Boolean
+  @native protected def _saveConfig(ptr: Long, altFile: String): Boolean
+  @native protected def _getConfigPath(ptr: Long): String
+  @native protected def _setConfigPath(ptr: Long, filePath: String): Boolean
+  @native protected def _configFileName(ptr: Long): String
+  @native protected def _setConfigItem(ptr: Long, key: String, value: String): Boolean
   @native protected def _clearConfig(ptr: Long): Unit
-  @native protected def _clearConfigItem(ptr: Long): Unit
-  @native protected def _getConfigItem(ptr: Long): Unit
-  @native protected def _getRunningConfigItem(ptr: Long): Unit
-  @native protected def _getKeys(ptr: Long): Unit
+  @native protected def _clearConfigItem(ptr: Long, key: String): Boolean
+  @native protected def _getConfigItem(ptr: Long, key: String): String
+  @native protected def _getRunningConfigItem(ptr: Long, key: String): String
+  @native protected def _getKeys(ptr: Long, key: String): Array[String]
+  /*
 
   @native protected def _wantDaemonize(ptr: Long): Unit
   @native protected def _wantCloseAllFDs(ptr: Long): Unit
@@ -158,17 +159,6 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   ///////////
   // STUBS //
   ///////////
-
-  protected def _saveConfig(ptr: Long) = ???
-  protected def _getConfigPath(ptr: Long) = ???
-  protected def _setConfigPath(ptr: Long) = ???
-  protected def _configFileName(ptr: Long) = ???
-  protected def _setConfigItem(ptr: Long) = ???
-  protected def _clearConfig(ptr: Long) = ???
-  protected def _clearConfigItem(ptr: Long) = ???
-  protected def _getConfigItem(ptr: Long) = ???
-  protected def _getRunningConfigItem(ptr: Long) = ???
-  protected def _getKeys(ptr: Long) = ???
 
   protected def _wantDaemonize(ptr: Long) = ???
   protected def _wantCloseAllFDs(ptr: Long) = ???
