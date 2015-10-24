@@ -1,5 +1,7 @@
 package net.magik6k.jliblxc.natives
 
+import net.magik6k.jliblxc.BdevSpecs
+
 private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   private var containerPtr: Long = open(name, configPath)
 
@@ -49,7 +51,7 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
 
   def waitForState(state: String, timeout: Int) = _waitForState(containerPtr, state, timeout)
 
-  def create() = _create(containerPtr)
+  def create(template: String, bdType: String, bdSpecs: BdevSpecs, flags: Int, args: Array[String]) = _create(containerPtr, template, bdType, bdSpecs, flags, args)
   def cloneContainer() = _cloneContainer(containerPtr)
   def rename() = _rename(containerPtr)
   def destroy() = _destroy(containerPtr)
@@ -125,14 +127,14 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   @native protected def _wantCloseAllFDs(ptr: Long, state: Boolean): Boolean
   @native protected def _waitForState(ptr: Long, state: String, timeout: Int): Boolean
 
-  /*
-  @native protected def _create(ptr: Long): Unit
+  // Native: LxcContainerManage.c
+  @native protected def _create(ptr: Long, template: String, bdType: String, bdSpecs: BdevSpecs, flags: Int, args: Array[String]): Boolean
   @native protected def _cloneContainer(ptr: Long): Unit
   @native protected def _rename(ptr: Long): Unit
   @native protected def _destroy(ptr: Long): Unit
   @native protected def _destroyWithSnapshots(ptr: Long): Unit
   @native protected def _snapshotDestroyAll(ptr: Long): Unit
-
+  /*
   @native protected def _checkpoint(ptr: Long): Unit
   @native protected def _restore(ptr: Long): Unit
   @native protected def _snapshot(ptr: Long): Unit
@@ -160,13 +162,6 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   ///////////
   // STUBS //
   ///////////
-
-  protected def _create(ptr: Long) = ???
-  protected def _cloneContainer(ptr: Long) = ???
-  protected def _rename(ptr: Long) = ???
-  protected def _destroy(ptr: Long) = ???
-  protected def _destroyWithSnapshots(ptr: Long) = ???
-  protected def _snapshotDestroyAll(ptr: Long) = ???
 
   protected def _checkpoint(ptr: Long) = ???
   protected def _restore(ptr: Long) = ???

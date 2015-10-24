@@ -267,10 +267,21 @@ class LxcContainer(name: String, configPath: String = null) {
   def waitForState(state: String, timeout: Int) = native.waitForState(state, timeout)
 
 
-  /** This method is not implemented yet
+  /** Create a container.
     *
+    * @param template Template to execute to instantiate the root
+    *  filesystem and adjust the configuration.
+    * @param bdType Backing store type to use (if \c NULL, \c dir will be used).
+    * @param bdSpecs Additional parameters for the backing store (for
+    *  example LVM volume group to use).
+    * @param flags LXC_CREATE_* options (currently only \ref
+    *  LXC_CREATE_QUIET is supported).
+    * @param args Arguments to pass to the template
+    *
+    * @return true on success, else false.
     */
-  def create() = native.create()
+  def create(template: String, bdType: String, bdSpecs: BdevSpecs = null, flags: Int = 0, args: Array[String] = null)
+    = native.create(template, bdType, bdSpecs, flags, args)
 
   /** This method is not implemented yet
     *
