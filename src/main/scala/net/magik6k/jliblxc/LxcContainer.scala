@@ -241,21 +241,30 @@ class LxcContainer(name: String, configPath: String = null) {
   def getKeys(key: String) = native.getKeys(key)
 
 
-  /** This method is not implemented yet
+  /** Determine if the container wants to run disconnected from the terminal.
     *
+    * @param state Value for the daemonize bit (0 or 1).
+    * @return true if container wants to be daemonised, else false.
     */
-  def wantDaemonize() = native.wantDaemonize()
+  def wantDaemonize(state: Boolean) = native.wantDaemonize(state)
 
-  /** This method is not implemented yet
+  /** Determine whether container wishes all file descriptors to be closed on startup.
     *
+    * @param state Value for the close_all_fds bit (0 or 1).
+    * @return true if container wants all file descriptors closed, else \c false.
     */
-  def wantCloseAllFDs() = native.wantCloseAllFDs()
+  def wantCloseAllFDs(state: Boolean) = native.wantCloseAllFDs(state)
 
 
-  /** This method is not implemented yet
+  /** Wait for container to reach a particular state.
     *
+    * @param state State to wait for.
+    * @param timeout Timeout in seconds.
+    * @return true if state reached within timeout, else false.
+    * @note A timeout of -1 means wait forever. A timeout
+    *       of 0 means do not wait.
     */
-  def waitForState() = native.waitForState()
+  def waitForState(state: String, timeout: Int) = native.waitForState(state, timeout)
 
 
   /** This method is not implemented yet

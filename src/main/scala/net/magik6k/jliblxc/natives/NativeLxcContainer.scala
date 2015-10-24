@@ -44,10 +44,10 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   def getRunningConfigItem(key: String) = _getRunningConfigItem(containerPtr, key)
   def getKeys(key: String) = _getKeys(containerPtr, key)
 
-  def wantDaemonize() = _wantDaemonize(containerPtr)
-  def wantCloseAllFDs() = _wantCloseAllFDs(containerPtr)
+  def wantDaemonize(state: Boolean) = _wantDaemonize(containerPtr, state)
+  def wantCloseAllFDs(state: Boolean) = _wantCloseAllFDs(containerPtr, state)
 
-  def waitForState() = _waitForState(containerPtr)
+  def waitForState(state: String, timeout: Int) = _waitForState(containerPtr, state, timeout)
 
   def create() = _create(containerPtr)
   def cloneContainer() = _cloneContainer(containerPtr)
@@ -107,6 +107,7 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   @native protected def _reboot(ptr: Long): Boolean
   @native protected def _shutdown(ptr: Long, timeout: Int): Boolean
 
+  // Native: LxcContainerConfig.c
   @native protected def _loadConfig(ptr: Long, altFile: String): Boolean
   @native protected def _saveConfig(ptr: Long, altFile: String): Boolean
   @native protected def _getConfigPath(ptr: Long): String
@@ -118,13 +119,13 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   @native protected def _getConfigItem(ptr: Long, key: String): String
   @native protected def _getRunningConfigItem(ptr: Long, key: String): String
   @native protected def _getKeys(ptr: Long, key: String): Array[String]
+
+  // Native: LxcContainerState.c
+  @native protected def _wantDaemonize(ptr: Long, state: Boolean): Boolean
+  @native protected def _wantCloseAllFDs(ptr: Long, state: Boolean): Boolean
+  @native protected def _waitForState(ptr: Long, state: String, timeout: Int): Boolean
+
   /*
-
-  @native protected def _wantDaemonize(ptr: Long): Unit
-  @native protected def _wantCloseAllFDs(ptr: Long): Unit
-
-  @native protected def _waitForState(ptr: Long): Unit
-
   @native protected def _create(ptr: Long): Unit
   @native protected def _cloneContainer(ptr: Long): Unit
   @native protected def _rename(ptr: Long): Unit
@@ -159,11 +160,6 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   ///////////
   // STUBS //
   ///////////
-
-  protected def _wantDaemonize(ptr: Long) = ???
-  protected def _wantCloseAllFDs(ptr: Long) = ???
-
-  protected def _waitForState(ptr: Long) = ???
 
   protected def _create(ptr: Long) = ???
   protected def _cloneContainer(ptr: Long) = ???
