@@ -2,8 +2,16 @@ package net.magik6k.jliblxc.natives
 
 import net.magik6k.jliblxc.BdevSpecs
 
-private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
-  private var containerPtr: Long = open(name, configPath)
+private class NativeLxcContainerStatic {
+  @native def open(name: String, configPath: String): Long
+}
+
+private object NativeLxcContainer extends NativeLxcContainerStatic
+
+private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
+
+  def this(name: String, configPath: String) {this(NativeLxcContainer.open(name, configPath))}
+  //def this(containerPtr: Long) {this(); this.containerPtr = containerPtr}
 
   if(containerPtr == 0)
     throw new NullPointerException("Cannot open container")
@@ -52,8 +60,9 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
   def waitForState(state: String, timeout: Int) = _waitForState(containerPtr, state, timeout)
 
   def create(template: String, bdType: String, bdSpecs: BdevSpecs, flags: Int, args: Array[String]) = _create(containerPtr, template, bdType, bdSpecs, flags, args)
-  def cloneContainer() = _cloneContainer(containerPtr)
-  def rename() = _rename(containerPtr)
+  def cloneContainer(newName: String, lxcPath: String, flags: Int, bDevType: String, bDevData: String, newSize: Long, hookArgs: Array[String])
+    = new NativeLxcContainer(_cloneContainer(containerPtr, newName, lxcPath, flags, bDevType, bDevData, newSize, hookArgs))
+  def rename(newName: String) = _rename(containerPtr, newName)
   def destroy() = _destroy(containerPtr)
   def destroyWithSnapshots() = _destroyWithSnapshots(containerPtr)
   def snapshotDestroyAll() = _snapshotDestroyAll(containerPtr)
@@ -88,7 +97,6 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
 
   // Static
   // Native: LxcContainer.c
-  @native protected def open(name: String, configPath: String): Long
   @native protected def _free(ptr: Long): Long
 
   // Non-static
@@ -129,11 +137,11 @@ private[jliblxc] class NativeLxcContainer(name: String, configPath: String) {
 
   // Native: LxcContainerManage.c
   @native protected def _create(ptr: Long, template: String, bdType: String, bdSpecs: BdevSpecs, flags: Int, args: Array[String]): Boolean
-  @native protected def _cloneContainer(ptr: Long): Unit
-  @native protected def _rename(ptr: Long): Unit
-  @native protected def _destroy(ptr: Long): Unit
-  @native protected def _destroyWithSnapshots(ptr: Long): Unit
-  @native protected def _snapshotDestroyAll(ptr: Long): Unit
+  @native protected def _cloneContainer(ptr: Long, newName: String, lxcPath: String, flags: Int, bDevType: String, bDevData: String, newSize: Long, hookArgs: Array[String]): Long
+  @native protected def _rename(ptr: Long, newName: String): Boolean
+  @native protected def _destroy(ptr: Long): Boolean
+  @native protected def _destroyWithSnapshots(ptr: Long): Boolean
+  @native protected def _snapshotDestroyAll(ptr: Long): Boolean
   /*
   @native protected def _checkpoint(ptr: Long): Unit
   @native protected def _restore(ptr: Long): Unit

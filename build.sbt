@@ -13,7 +13,8 @@ gccFlags -= "-std=c++11"
 gccFlags += "-llxc"
 
 jniClasses := Seq(
-  "net.magik6k.jliblxc.natives.NativeLxcContainer"
+  "net.magik6k.jliblxc.natives.NativeLxcContainer",
+  "net.magik6k.jliblxc.natives.NativeLxcContainerStatic"
 )
 
 //baseDirectory in run := file("target/native/bin")

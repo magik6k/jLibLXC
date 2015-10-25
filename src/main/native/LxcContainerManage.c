@@ -111,3 +111,96 @@ JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__
 
   return result;
 }
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _cloneContainer
+ * Signature: (JLjava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;J[Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1cloneContainer
+  (JNIEnv * env, jobject object, jlong ptr, jstring jnewName, jstring jlxcPath, jint flags, jstring jbDevType, jstring jbDevData, jlong newSize, jobjectArray args) {
+  struct lxc_container* container = (struct lxc_container*) ptr;
+
+  const char* newName = jnewName ? (*env) -> GetStringUTFChars(env, jnewName, 0) : NULL;
+  const char* lxcPath = jlxcPath ? (*env) -> GetStringUTFChars(env, jlxcPath, 0) : NULL;
+  const char* bDevType = jbDevType ? (*env) -> GetStringUTFChars(env, jbDevType, 0) : NULL;
+  const char* bDevData = jbDevData ? (*env) -> GetStringUTFChars(env, jbDevData, 0) : NULL;
+
+  int argc = args ? (*env) -> GetArrayLength(env, args) : 0;
+  char**     argv  = argc ? malloc(sizeof(void*) * (argc + 1)) : NULL;
+  jstring * jargv = argc ? malloc(sizeof(void*) * (argc + 1)) : NULL;
+  if(args) {
+    argv[argc] = NULL;
+    for (int i = 0; i < argc; i++) {
+      jargv[i] = (jstring) (*env) -> GetObjectArrayElement(env, args, i);
+      argv[i] = (char*) (*env) -> GetStringUTFChars(env, jargv[i], 0);
+    }
+  }
+
+  long result = (long) container -> clone(container, newName, lxcPath, flags, bDevType, bDevData, newSize, argv);
+
+  if(args) {
+    for (int i = 0; i < argc; i++) {
+      (*env) -> ReleaseStringUTFChars(env, jargv[i], argv[i]);
+    }
+    free(argv);
+    free(jargv);
+  }
+  if(newName) (*env) -> ReleaseStringUTFChars(env, jnewName, newName);
+  if(lxcPath) (*env) -> ReleaseStringUTFChars(env, jlxcPath, lxcPath);
+  if(bDevType) (*env) -> ReleaseStringUTFChars(env, jbDevType, bDevType);
+  if(bDevData) (*env) -> ReleaseStringUTFChars(env, jbDevData, bDevData);
+
+  return result;
+}
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _rename
+ * Signature: (JLjava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1rename
+  (JNIEnv * env, jobject object, jlong ptr, jstring jnewName) {
+  struct lxc_container* container = (struct lxc_container*) ptr;
+
+  const char* newName = (*env) -> GetStringUTFChars(env, jnewName, 0);
+  bool result = container -> rename(container, newName);
+  (*env) -> ReleaseStringUTFChars(env, jnewName, newName);
+  return result;
+}
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _destroy
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1destroy
+  (JNIEnv * env, jobject object, jlong ptr) {
+  struct lxc_container* container = (struct lxc_container*) ptr;
+
+  return container -> destroy(container);
+}
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _destroyWithSnapshots
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1destroyWithSnapshots
+  (JNIEnv * env, jobject object, jlong ptr) {
+  struct lxc_container* container = (struct lxc_container*) ptr;
+
+  return container -> destroy_with_snapshots(container);
+}
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _snapshotDestroyAll
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1snapshotDestroyAll
+  (JNIEnv * env, jobject object, jlong ptr) {
+  struct lxc_container* container = (struct lxc_container*) ptr;
+
+  return container -> snapshot_destroy_all(container);
+}

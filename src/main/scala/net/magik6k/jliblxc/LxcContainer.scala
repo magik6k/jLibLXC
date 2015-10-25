@@ -283,28 +283,55 @@ class LxcContainer(name: String, configPath: String = null) {
   def create(template: String, bdType: String, bdSpecs: BdevSpecs = null, flags: Int = 0, args: Array[String] = null)
     = native.create(template, bdType, bdSpecs, flags, args)
 
-  /** This method is not implemented yet
+  /** Copy a stopped container.
     *
+    * @param newName New name for the container. If NULL, the same
+    *                name is used and a new lxcPath MUST be specified.
+    * @param bDevType Optionally force the cloned bdevtype to a specified plugin.
+    *                 By default the original is used (subject to snapshot requirements).
+    * @param flags Additional \c LXC_CLONE* flags to change the cloning behaviour:
+    *              - LXC_CLONE_KEEPNAME
+    *              - LXC_CLONE_KEEPMACADDR
+    *              - LXC_CLONE_SNAPSHOT
+    * @param lxcPath lxcpath in which to create the new container. If
+    *                NULL, the original container's lxcpath will be used.
+    * @param bDevData Information about how to create the new storage
+    *                 (i.e. fstype and fsdata).
+    * @param newSize In case of a block device backing store, an
+    *                optional size. If \c 0, the original backing store's size will
+    *                be used if possible. Note this only applies to the rootfs. For
+    *                any other filesystems, the original size will be duplicated.
+    * @param hookArgs Additional arguments to pass to the clone hook script.
+    * @return Newly-allocated copy of container, or NULL on error.
     */
-  def cloneContainer() = native.cloneContainer()
+  def cloneContainer(newName: String, bDevType: String = null, flags: Int = 0, lxcPath: String = null
+                     , bDevData: String = null, newSize: Long = 0, hookArgs: Array[String] = null)
+    = native.cloneContainer(newName, lxcPath, flags, bDevType, bDevData, newSize, hookArgs)
 
-  /** This method is not implemented yet
+  /** Rename a container
     *
+    * @param newName New name to be used for the container.
+    * @return true on success, else false.
     */
-  def rename() = native.rename()
+  def rename(newName: String) = native.rename(newName)
 
-  /** This method is not implemented yet
+  /** Delete the container.
     *
+    * @return true on success, else false.
+    * @note Container must be stopped and have no dependent snapshots.
     */
   def destroy() = native.destroy()
 
-  /** This method is not implemented yet
+  /** Delete the container and all its snapshots.
     *
+    * @return true on success, else false.
+    * @note Container must be stopped.
     */
   def destroyWithSnapshots() = native.destroyWithSnapshots()
 
-  /** This method is not implemented yet
+  /** Destroy all the container's snapshot.
     *
+    * @return true on success, else false.
     */
   def snapshotDestroyAll() = native.snapshotDestroyAll()
 
