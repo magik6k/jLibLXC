@@ -1,6 +1,6 @@
 package net.magik6k.jliblxc.natives
 
-import net.magik6k.jliblxc.BdevSpecs
+import net.magik6k.jliblxc.{Snapshot, BdevSpecs}
 
 private class NativeLxcContainerStatic {
   @native def open(name: String, configPath: String): Long
@@ -67,12 +67,12 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   def destroyWithSnapshots() = _destroyWithSnapshots(containerPtr)
   def snapshotDestroyAll() = _snapshotDestroyAll(containerPtr)
 
-  def checkpoint() = _checkpoint(containerPtr)
-  def restore() = _restore(containerPtr)
-  def snapshot() = _snapshot(containerPtr)
+  def checkpoint(directory: String, stop: Boolean, verbose: Boolean) = _checkpoint(containerPtr, directory, stop, verbose)
+  def restore(directory: String, verbose: Boolean) = _restore(containerPtr, directory, verbose)
+  def snapshot(commentFile: String) = _snapshot(containerPtr, commentFile)
   def snapshotList() = _snapshotList(containerPtr)
-  def snapshotRestore() = _snapshotRestore(containerPtr)
-  def snapshotDestroy() = _snapshotDestroy(containerPtr)
+  def snapshotRestore(snapName: String, newName: String) = _snapshotRestore(containerPtr, snapName, newName)
+  def snapshotDestroy(snapName: String) = _snapshotDestroy(containerPtr, snapName)
 
   def getInterfaces = _getInterfaces(containerPtr)
   def getIps = _getIps(containerPtr)
@@ -142,14 +142,14 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   @native protected def _destroy(ptr: Long): Boolean
   @native protected def _destroyWithSnapshots(ptr: Long): Boolean
   @native protected def _snapshotDestroyAll(ptr: Long): Boolean
-  /*
-  @native protected def _checkpoint(ptr: Long): Unit
-  @native protected def _restore(ptr: Long): Unit
-  @native protected def _snapshot(ptr: Long): Unit
-  @native protected def _snapshotList(ptr: Long): Unit
-  @native protected def _snapshotRestore(ptr: Long): Unit
-  @native protected def _snapshotDestroy(ptr: Long): Unit
 
+  @native protected def _checkpoint(ptr: Long, directory: String, stop: Boolean, verbose: Boolean): Boolean
+  @native protected def _restore(ptr: Long, directory: String, verbose: Boolean): Boolean
+  @native protected def _snapshot(ptr: Long, commentFile: String): Int
+  @native protected def _snapshotList(ptr: Long): Array[Snapshot]
+  @native protected def _snapshotRestore(ptr: Long, snapName: String, newName: String): Boolean
+  @native protected def _snapshotDestroy(ptr: Long, snapName: String): Boolean
+  /*
   @native protected def _getInterfaces(ptr: Long): Unit
   @native protected def _getIps(ptr: Long): Unit
   @native protected def _attachInterface(ptr: Long): Unit
@@ -170,14 +170,6 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   ///////////
   // STUBS //
   ///////////
-
-  protected def _checkpoint(ptr: Long) = ???
-  protected def _restore(ptr: Long) = ???
-  protected def _snapshot(ptr: Long) = ???
-  protected def _snapshotList(ptr: Long) = ???
-  protected def _snapshotRestore(ptr: Long) = ???
-  protected def _snapshotDestroy(ptr: Long) = ???
-
   protected def _getInterfaces(ptr: Long) = ???
   protected def _getIps(ptr: Long) = ???
   protected def _attachInterface(ptr: Long) = ???

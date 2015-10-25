@@ -1,7 +1,6 @@
 package net.magik6k.jliblxc
 
 import java.io.File
-import java.nio.file.Path
 
 /** LXC Container instance
   *
@@ -10,7 +9,7 @@ import java.nio.file.Path
   *                   by default /var/lib/lxc
   */
 class LxcContainer(name: String, configPath: String = null) {
-  val native = NativeLoader.getNativeContainer(name, configPath)
+  private val native = NativeLoader.getNativeContainer(name, configPath)
 
   def this(name: String) = this(name, null)
 
@@ -336,35 +335,67 @@ class LxcContainer(name: String, configPath: String = null) {
   def snapshotDestroyAll() = native.snapshotDestroyAll()
 
 
-  /** This method is not implemented yet
+  /** Checkpoint a container.
     *
+    * @param directory The directory to dump the container to.
+    * @param stop Whether or not to stop the container after checkpointing.
+    * @param verbose Enable criu's verbose logs.
+    * @return true on success, else false.
     */
-  def checkpoint() = native.checkpoint()
+  def checkpoint(directory: String, stop: Boolean, verbose: Boolean) = native.checkpoint(directory, stop, verbose)
 
-  /** This method is not implemented yet
+  /** Restore a container from a checkpoint.
     *
+    * @param directory The directory to dump the container to.
+    * @param verbose Enable criu's verbose logs.
+    * @return true on success, else false.
     */
-  def restore() = native.restore()
+  def restore(directory: String, verbose: Boolean) = native.restore(directory, verbose)
 
-  /** This method is not implemented yet
+  /** Create a container snapshot.
     *
+    * Assuming default paths, snapshots will be created as
+    * /var/lib/lxc/\<c\>/snaps/snap\
+    * where \<c\> represents the container name and
+    * represents the zero-based snapshot number.
+    *
+    * @param commentFile Full path to file containing a description
+    *  of the snapshot.
+    * @return -1 on error, or zero-based snapshot number.
+    *
+    * @note commentfile may be NULL but this is discouraged.
     */
-  def snapshot() = native.snapshot()
+  def snapshot(commentFile: String = null) = native.snapshot(commentFile)
 
-  /** This method is not implemented yet
+  /** Obtain a list of container snapshots.
     *
+    * @return List of snapshots.
     */
   def snapshotList() = native.snapshotList()
 
-  /** This method is not implemented yet
+  /** Create a new container based on a snapshot.
     *
+    * The restored container will be a copy (not snapshot) of the snapshot,
+    * and restored in the lxcpath of the original container.
+    * @param snapName Name of snapshot.
+    * @param newName Name to be used for the restored snapshot.
+    * @return true on success, else false.
+    * @note If newname is the same as the current container
+    *  name, the container will be destroyed. However, this will
+    *  fail if the  snapshot is overlay-based, since the snapshots
+    *  will pin the original container.
+    * @note As an example, if the container exists as /var/lib/lxc/c1, snapname might be 'snap0'
+    *  (representing /var/lib/lxc/c1/snaps/snap0). If newname is c2,
+    *  then snap0 will be copied to /var/lib/lxc/c2.
     */
-  def snapshotRestore() = native.snapshotRestore()
+  def snapshotRestore(snapName: String, newName: String) = native.snapshotRestore(snapName, newName)
 
-  /** This method is not implemented yet
+  /** Destroy the specified snapshot.
     *
+    * @param snapName Name of snapshot.
+    * @return true on success, else false.
     */
-  def snapshotDestroy() = native.snapshotDestroy()
+  def snapshotDestroy(snapName: String) = native.snapshotDestroy(snapName)
 
 
   /** This method is not implemented yet
