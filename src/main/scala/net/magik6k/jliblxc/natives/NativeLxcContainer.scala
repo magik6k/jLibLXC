@@ -1,5 +1,7 @@
 package net.magik6k.jliblxc.natives
 
+import java.net.ProtocolFamily
+
 import net.magik6k.jliblxc.{Snapshot, BdevSpecs}
 
 private class NativeLxcContainerStatic {
@@ -75,9 +77,9 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   def snapshotDestroy(snapName: String) = _snapshotDestroy(containerPtr, snapName)
 
   def getInterfaces = _getInterfaces(containerPtr)
-  def getIps = _getIps(containerPtr)
-  def attachInterface() = _attachInterface(containerPtr)
-  def detachInterface() = _detachInterface(containerPtr)
+  def getIps(interface: String, family: String, scope: Int) = _getIps(containerPtr, interface, family, scope)
+  def attachInterface(device: String, dstDevice: String) = _attachInterface(containerPtr, device, dstDevice)
+  def detachInterface(device: String, dstDevice: String) = _detachInterface(containerPtr, device, dstDevice)
 
   def getCgroupItem = _getCgroupItem(containerPtr)
   def setCgroupItem() = _setCgroupItem(containerPtr)
@@ -143,18 +145,20 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   @native protected def _destroyWithSnapshots(ptr: Long): Boolean
   @native protected def _snapshotDestroyAll(ptr: Long): Boolean
 
+  // Native: LxcContainerSnapshot.c
   @native protected def _checkpoint(ptr: Long, directory: String, stop: Boolean, verbose: Boolean): Boolean
   @native protected def _restore(ptr: Long, directory: String, verbose: Boolean): Boolean
   @native protected def _snapshot(ptr: Long, commentFile: String): Int
   @native protected def _snapshotList(ptr: Long): Array[Snapshot]
   @native protected def _snapshotRestore(ptr: Long, snapName: String, newName: String): Boolean
   @native protected def _snapshotDestroy(ptr: Long, snapName: String): Boolean
-  /*
-  @native protected def _getInterfaces(ptr: Long): Unit
-  @native protected def _getIps(ptr: Long): Unit
-  @native protected def _attachInterface(ptr: Long): Unit
-  @native protected def _detachInterface(ptr: Long): Unit
 
+  // Native: LxcContainerNetwork.c
+  @native protected def _getInterfaces(ptr: Long): Array[String]
+  @native protected def _getIps(ptr: Long, interface: String, family: String, scope: Int): Array[String]
+  @native protected def _attachInterface(ptr: Long, device: String, dstDevice: String): Boolean
+  @native protected def _detachInterface(ptr: Long, device: String, dstDevice: String): Boolean
+  /*
   @native protected def _getCgroupItem(ptr: Long): Unit
   @native protected def _setCgroupItem(ptr: Long): Unit
 
@@ -170,11 +174,6 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   ///////////
   // STUBS //
   ///////////
-  protected def _getInterfaces(ptr: Long) = ???
-  protected def _getIps(ptr: Long) = ???
-  protected def _attachInterface(ptr: Long) = ???
-  protected def _detachInterface(ptr: Long) = ???
-
   protected def _getCgroupItem(ptr: Long) = ???
   protected def _setCgroupItem(ptr: Long) = ???
 

@@ -398,26 +398,39 @@ class LxcContainer(name: String, configPath: String = null) {
   def snapshotDestroy(snapName: String) = native.snapshotDestroy(snapName)
 
 
-  /** This method is not implemented yet
+  /** Obtain a list of network interfaces.
     *
+    * @return Array of network interfaces, or null on error.
     */
-  def getInterfaces() = native.getInterfaces
+  def getInterfaces = native.getInterfaces
 
-  /** This method is not implemented yet
+  /** Determine the list of container IP addresses.
     *
-    */
-  def getIps() = native.getIps
-
-  /** This method is not implemented yet
+    * @param interface Network interface name to consider.
+    * @param family Network family (for example "inet", "inet6").
+    * @param scope IPv6 scope id (ignored if family is not "inet6").
     *
+    * @return Array of network interface addresses, or null on error.
     */
-  def attachInterface() = native.attachInterface()
+  def getIps(interface: String, family: String, scope: Int) = native.getIps(interface, family, scope)
 
-  /** This method is not implemented yet
+  /** Add specified netdev to the container.
     *
+    * @param device name of the net device.
+    * @param dstDevice name of the  other net device.
+    * @return true on success, else false.
+    * @todo FIX THIS DOCS IN LIBLXC AND PUT HERE
     */
-  def detachInterface() = native.detachInterface()
+  def attachInterface(ptr: Long, device: String, dstDevice: String) = native.attachInterface(device, dstDevice)
 
+  /** Remove specified device from the container.
+    *
+    * @param device name of the net device.
+    * @param dstDevice name of the  other net device.
+    * @return true on success, else false.
+    * @todo FIX THIS DOCS IN LIBLXC AND PUT HERE
+    */
+  def detachInterface(ptr: Long, device: String, dstDevice: String) = native.detachInterface(device, dstDevice)
 
   /** This method is not implemented yet
     *
