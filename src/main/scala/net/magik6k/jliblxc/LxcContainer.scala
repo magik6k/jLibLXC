@@ -432,15 +432,20 @@ class LxcContainer(name: String, configPath: String = null) {
     */
   def detachInterface(ptr: Long, device: String, dstDevice: String) = native.detachInterface(device, dstDevice)
 
-  /** This method is not implemented yet
+  /** Retrieve the specified cgroup subsystem value for the container.
     *
+    * @param subSystem cgroup subsystem to consider, like 'blkio.time'.
+    * @return subSystem value or null on error.
     */
-  def getCgroupItem() = native.getCgroupItem
+  def getCgroupItem(subSystem: String) = native.getCgroupItem(subSystem)
 
-  /** This method is not implemented yet
+  /** Set the specified cgroup subsystem value for the container.
     *
+    * @param subSystem cgroup subsystem to consider, like 'blkio.time'.
+    * @param value Value to set for subSystem.
+    * @return true on success, else false.
     */
-  def setCgroupItem() = native.setCgroupItem()
+  def setCgroupItem(subSystem: String, value: String) = native.setCgroupItem(subSystem, value)
 
 
   /** This method is not implemented yet
@@ -464,16 +469,22 @@ class LxcContainer(name: String, configPath: String = null) {
   def attachRunWait() = native.attachRunWait()
 
 
-  /** This method is not implemented yet
+  /** Add specified device to the container.
     *
+    * @param srcPath Full path of the device.
+    * @param dstPath Alternate path in the container (or \p NULL
+    *  to use src_path).
+    * @return true on success, else false.
     */
-  def addDeviceNode() = native.addDeviceNode()
+  def addDeviceNode(srcPath: String, dstPath: String) = native.addDeviceNode(srcPath, dstPath)
 
-  /** This method is not implemented yet
+  /** Remove specified device from the container.
     *
+    * @param srcPath Full path of the device.
+    * @param dstPath Alternate path in the container (or \p NULL
+    *  to use src_path).
+    * @return true on success, else false.
     */
-  def removeDeviceNode() = native.removeDeviceNode()
-
-
+  def removeDeviceNode(srcPath: String, dstPath: String) = native.removeDeviceNode(srcPath, dstPath)
 
 }

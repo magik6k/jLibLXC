@@ -1,7 +1,5 @@
 package net.magik6k.jliblxc.natives
 
-import java.net.ProtocolFamily
-
 import net.magik6k.jliblxc.{Snapshot, BdevSpecs}
 
 private class NativeLxcContainerStatic {
@@ -81,16 +79,16 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   def attachInterface(device: String, dstDevice: String) = _attachInterface(containerPtr, device, dstDevice)
   def detachInterface(device: String, dstDevice: String) = _detachInterface(containerPtr, device, dstDevice)
 
-  def getCgroupItem = _getCgroupItem(containerPtr)
-  def setCgroupItem() = _setCgroupItem(containerPtr)
+  def getCgroupItem(subSystem: String) = _getCgroupItem(containerPtr, subSystem)
+  def setCgroupItem(subSystem: String, value: String) = _setCgroupItem(containerPtr, subSystem, value)
 
   def consoleGetFD() = _consoleGetFD(containerPtr)
   def console() = _console(containerPtr)
   def attach() = _attach(containerPtr)
   def attachRunWait() = _attachRunWait(containerPtr)
 
-  def addDeviceNode() = _addDeviceNode(containerPtr)
-  def removeDeviceNode() = _removeDeviceNode(containerPtr)
+  def addDeviceNode(srcPath: String, dstPath: String) = _addDeviceNode(containerPtr, srcPath, dstPath)
+  def removeDeviceNode(srcPath: String, dstPath: String) = _removeDeviceNode(containerPtr, srcPath, dstPath)
 
 
   /////////////
@@ -158,31 +156,18 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   @native protected def _getIps(ptr: Long, interface: String, family: String, scope: Int): Array[String]
   @native protected def _attachInterface(ptr: Long, device: String, dstDevice: String): Boolean
   @native protected def _detachInterface(ptr: Long, device: String, dstDevice: String): Boolean
-  /*
-  @native protected def _getCgroupItem(ptr: Long): Unit
-  @native protected def _setCgroupItem(ptr: Long): Unit
 
+  // Native: LxcContainerCgroup.c
+  @native protected def _getCgroupItem(ptr: Long, subSystem: String): String
+  @native protected def _setCgroupItem(ptr: Long, subSystem: String, value: String): Boolean
+
+  // Native: LxcContainerConsole.c
   @native protected def _consoleGetFD(ptr: Long): Unit
   @native protected def _console(ptr: Long): Unit
   @native protected def _attach(ptr: Long): Unit
   @native protected def _attachRunWait(ptr: Long): Unit
 
-  @native protected def _addDeviceNode(ptr: Long): Unit
-  @native protected def _removeDeviceNode(ptr: Long): Unit
-  */
-
-  ///////////
-  // STUBS //
-  ///////////
-  protected def _getCgroupItem(ptr: Long) = ???
-  protected def _setCgroupItem(ptr: Long) = ???
-
-  protected def _consoleGetFD(ptr: Long) = ???
-  protected def _console(ptr: Long) = ???
-  protected def _attach(ptr: Long) = ???
-  protected def _attachRunWait(ptr: Long) = ???
-
-  protected def _addDeviceNode(ptr: Long) = ???
-  protected def _removeDeviceNode(ptr: Long) = ???
-
+  // Native: LxcContainerDevice.c
+  @native protected def _addDeviceNode(ptr: Long, srcPath: String, dstPath: String): Boolean
+  @native protected def _removeDeviceNode(ptr: Long, srcPath: String, dstPath: String): Boolean
 }
