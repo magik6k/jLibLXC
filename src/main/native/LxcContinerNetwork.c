@@ -34,6 +34,11 @@ JNIEXPORT jobjectArray JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContain
   return result;
 }
 
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
+ * Method:    _getIps
+ * Signature: (JLjava/lang/String;Ljava/lang/String;I)[Ljava/lang/String;
+ */
 JNIEXPORT jobjectArray JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainer__1getIps
   (JNIEnv * env, jobject object, jlong ptr, jstring jinterface, jstring jfamily, jint scope) {
   struct lxc_container* container = (struct lxc_container*) ptr;

@@ -8,12 +8,18 @@ This project aims to deliver good, documented bindings and documentation for lib
 Usage
 -----
 ```scala
-val container = new LxcContainer("MyContainer")
+//Start a container
+new LxcContainer("MyContainer").start
 
-container.start()
+//Start all containers
+Lxc.getContainers.map(container => new LxcContainer(container)).foreach(container => container.start)
 ```
 
-Note that some parts of the API may change in future.
+Things to note
+-----
+
+* Some parts of the API may change in future.
+* If things that can't be null are null, JVM may crash(this needs to be fixed)
 
 Things that don't work / aren't tested properly / implemented
 -----

@@ -3,6 +3,48 @@
 #include <lxc/lxccontainer.h>
 
 /*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainerStatic
+ * Method:    list
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainerStatic_list
+  (JNIEnv* env, jobject object, jstring jlxcPath) {
+  const char* lxcPath = (*env) -> GetStringUTFChars(env, jlxcPath, 0);
+  char** containers = NULL;
+  int n = list_all_containers(lxcPath, &containers, NULL);
+  jobjectArray result = (jobjectArray) (*env) -> NewObjectArray(env, n,
+      (*env) -> FindClass(env, "java/lang/String"), (*env) -> NewStringUTF(env, ""));
+  for(int i = 0; i < n; i++) {
+    (*env) -> SetObjectArrayElement(env, result, i, (*env) -> NewStringUTF(env, containers[i]));
+  }
+
+  (*env) -> ReleaseStringUTFChars(env, jlxcPath, lxcPath);
+  free(containers);
+  return result;
+}
+
+/*
+ * Class:     net_magik6k_jliblxc_natives_NativeLxcContainerStatic
+ * Method:    listActive
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_net_magik6k_jliblxc_natives_NativeLxcContainerStatic_listActive
+  (JNIEnv* env, jobject object, jstring jlxcPath) {
+  const char* lxcPath = (*env) -> GetStringUTFChars(env, jlxcPath, 0);
+  char** containers = NULL;
+  int n = list_active_containers(lxcPath, &containers, NULL);
+  jobjectArray result = (jobjectArray) (*env) -> NewObjectArray(env, n,
+      (*env) -> FindClass(env, "java/lang/String"), (*env) -> NewStringUTF(env, ""));
+  for(int i = 0; i < n; i++) {
+    (*env) -> SetObjectArrayElement(env, result, i, (*env) -> NewStringUTF(env, containers[i]));
+  }
+
+  (*env) -> ReleaseStringUTFChars(env, jlxcPath, lxcPath);
+  free(containers);
+  return result;
+}
+
+/*
  * Class:     net_magik6k_jliblxc_natives_NativeLxcContainer
  * Method:    open
  * Signature: (Ljava/lang/String;Ljava/lang/String;)J
