@@ -1,7 +1,6 @@
 package net.magik6k.jliblxc
 
 import java.io.{FileDescriptor, InputStream, File}
-import java.nio.channels.AsynchronousFileChannel
 
 import sun.nio.ch.FileChannelImpl
 
