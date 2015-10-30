@@ -1,6 +1,9 @@
 package net.magik6k.jliblxc
 
-import java.io.File
+import java.io.{FileDescriptor, InputStream, File}
+import java.nio.channels.AsynchronousFileChannel
+
+import sun.nio.ch.FileChannelImpl
 
 /** LXC Container instance
   *
@@ -447,16 +450,12 @@ class LxcContainer(name: String, configPath: String = null) {
     */
   def setCgroupItem(subSystem: String, value: String) = native.setCgroupItem(subSystem, value)
 
-
   /** This method is not implemented yet
     *
     */
-  def consoleGetFD() = native.consoleGetFD()
-
-  /** This method is not implemented yet
-    *
-    */
-  def console() = native.console()
+  def console() = {
+    FileChannelImpl.open(native.console(), null, true, true, true, null)
+  }
 
   /** This method is not implemented yet
     *

@@ -1,5 +1,7 @@
 package net.magik6k.jliblxc.natives
 
+import java.io.FileDescriptor
+
 import net.magik6k.jliblxc.{Snapshot, BdevSpecs}
 
 private class NativeLxcContainerStatic {
@@ -82,7 +84,6 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   def getCgroupItem(subSystem: String) = _getCgroupItem(containerPtr, subSystem)
   def setCgroupItem(subSystem: String, value: String) = _setCgroupItem(containerPtr, subSystem, value)
 
-  def consoleGetFD() = _consoleGetFD(containerPtr)
   def console() = _console(containerPtr)
   def attach() = _attach(containerPtr)
   def attachRunWait() = _attachRunWait(containerPtr)
@@ -162,10 +163,9 @@ private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
   @native protected def _setCgroupItem(ptr: Long, subSystem: String, value: String): Boolean
 
   // Native: LxcContainerConsole.c
-  @native protected def _consoleGetFD(ptr: Long): Unit
-  @native protected def _console(ptr: Long): Unit
-  @native protected def _attach(ptr: Long): Unit
-  @native protected def _attachRunWait(ptr: Long): Unit
+  @native protected def _console(ptr: Long): FileDescriptor
+  @native protected def _attach(ptr: Long): Process
+  @native protected def _attachRunWait(ptr: Long): Int
 
   // Native: LxcContainerDevice.c
   @native protected def _addDeviceNode(ptr: Long, srcPath: String, dstPath: String): Boolean
