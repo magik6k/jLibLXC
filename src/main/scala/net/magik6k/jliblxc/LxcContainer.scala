@@ -1,17 +1,17 @@
 package net.magik6k.jliblxc
 
-import java.io.{FileDescriptor, InputStream, File}
+import java.io.File
 
 import sun.nio.ch.FileChannelImpl
 
 /** LXC Container instance
   *
   * @param name Name to use for container.
-  * @param configPath Optional full path to configuration file to use,
+  * @param lxcPath Optional full path to configuration file to use,
   *                   by default /var/lib/lxc
   */
-class LxcContainer(name: String, configPath: String = null) {
-  private val native = NativeLoader.getNativeContainer(name, configPath)
+class LxcContainer(name: String, lxcPath: String = null) {
+  private val native = NativeLoader.getNativeContainer(name, lxcPath)
 
   def this(name: String) = this(name, null)
 
@@ -95,7 +95,10 @@ class LxcContainer(name: String, configPath: String = null) {
     *
     * @return Static upper-case string representing state of container.
     */
-  def state() = native.state()
+  def state() = {
+    val s = native.state()
+    ContainerState.values().map(p => p.name -> p).toMap.getOrElse(s, ContainerState.UNKNOWN)
+  }
 
   /** Determine if container is running.
     *

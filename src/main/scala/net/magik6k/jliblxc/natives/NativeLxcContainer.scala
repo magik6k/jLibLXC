@@ -4,11 +4,13 @@ import java.io.FileDescriptor
 
 import net.magik6k.jliblxc.{Snapshot, BdevSpecs}
 
-private class NativeLxcContainerStatic {
+private[jliblxc] class NativeLxcContainerStatic {
+  @native def list(lxcpath: String): Array[String]
+  @native def listActive(lxcpath: String): Array[String]
   @native def open(name: String, configPath: String): Long
 }
 
-private object NativeLxcContainer extends NativeLxcContainerStatic
+private[jliblxc] object NativeLxcContainer extends NativeLxcContainerStatic
 
 private[jliblxc] class NativeLxcContainer(private var containerPtr: Long) {
 
