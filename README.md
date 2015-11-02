@@ -8,18 +8,15 @@ This project aims to deliver good, documented bindings and documentation for lib
 Usage
 -----
 ```scala
-//Start a container
-new LxcContainer("MyContainer").start
-
 //Start all containers
-Lxc.getContainers.map(container => new LxcContainer(container)).foreach(container => container.start)
+Lxc.getContainers.map(container => new LxcContainer(container)).foreach()
+
+//Start a container
+val container = new LxcContainer("MyContainer")
+container.start()
 ```
 
-Things to note
------
-
-* Some parts of the API may change in future.
-* If things that can't be null are null, JVM may crash(this needs to be fixed)
+Note that some parts of the API may change in future.
 
 Things that don't work / aren't tested properly / implemented
 -----
@@ -38,5 +35,7 @@ To test using Scala REPL as root user, in the main directory execute `sbt packag
 
 Distribution
 ----
-After compilation the library is at `target/scala-2.10/jliblxc*.jar`
+`net.magik6k:jliblxc:0.1.0` at the maven central repository
+
+After malual compilation the library is at `target/scala-2.10/jliblxc*.jar`
 
